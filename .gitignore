@@ -1,0 +1,25 @@
+# Environment variables
+.env
+.env.*
+
+# Keep the example environment file
+!.env.example
+
+# Go binaries
+*.exe
+*.out
+*.test
+
+# Build output
+bin/
+dist/
+
+# Air temporary files
+tmp/
+
+# IDE settings
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
