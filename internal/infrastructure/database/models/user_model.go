@@ -7,12 +7,12 @@ import (
 )
 
 type UserModel struct {
-	ID               uuid.UUID  `gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
-	Email            string     `gorm:"uniqueIndex;not null"`
-	PasswordHash     string     `gorm:"not null"`
-	FirstName        string     `gorm:"not null"`
-	LastName         string     `gorm:"not null"`
-	Status           string     `gorm:"default:active"`
+	ID               uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
+	Email            string    `gorm:"uniqueIndex;not null"`
+	PasswordHash     string    `gorm:"not null"`
+	FirstName        string    `gorm:"not null"`
+	LastName         string    `gorm:"not null"`
+	Status           string    `gorm:"default:active"`
 	EmailVerifiedAt  *time.Time
 	PhoneVerifiedAt  *time.Time
 	FailedLoginCount int

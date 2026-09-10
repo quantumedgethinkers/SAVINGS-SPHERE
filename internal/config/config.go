@@ -7,7 +7,7 @@ import (
 )
 
 type Config struct {
-	AppEnv string `mapstructure:"APP_ENV"`
+	AppEnv  string `mapstructure:"APP_ENV"`
 	AppName string `mapstructure:"APP_NAME"`
 	AppPort string `mapstructure:"APP_PORT"`
 
@@ -24,7 +24,6 @@ type Config struct {
 	CloudName string `mapstructure:"CLOUDINARY_CLOUD_NAME"`
 	APIKey    string `mapstructure:"CLOUDINARY_API_KEY"`
 	APISecret string `mapstructure:"CLOUDINARY_API_SECRET"`
-
 }
 
 func Load() (*Config, error) {
