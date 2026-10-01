@@ -1,0 +1,81 @@
+basePath: /
+definitions:
+  github_com_quantumedgethinkers_SAVINGS-SPHERE_internal_application_auth_dto.RegisterRequest:
+    properties:
+      email:
+        type: string
+      first_name:
+        maxLength: 100
+        minLength: 2
+        type: string
+      last_name:
+        maxLength: 100
+        minLength: 2
+        type: string
+      password:
+        minLength: 8
+        type: string
+    required:
+    - email
+    - first_name
+    - last_name
+    - password
+    type: object
+  github_com_quantumedgethinkers_SAVINGS-SPHERE_internal_application_auth_dto.RegisterResponse:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: string
+      last_name:
+        type: string
+      status:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Enterprise Digital Savings and Investment Platform API.
+  title: SaveSphere API
+  version: "1.0"
+paths:
+  /api/v1/auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new SaveSphere user account.
+      parameters:
+      - description: Registration details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_quantumedgethinkers_SAVINGS-SPHERE_internal_application_auth_dto.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_quantumedgethinkers_SAVINGS-SPHERE_internal_application_auth_dto.RegisterResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "409":
+          description: Conflict
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Register a new user
+      tags:
+      - Authentication
+swagger: "2.0"
