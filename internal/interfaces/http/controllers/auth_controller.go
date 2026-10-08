@@ -12,13 +12,16 @@ import (
 
 type AuthController struct {
 	registerUseCase *usecases.RegisterUseCase
+	loginUseCase    *usecases.LoginUseCase
 }
 
 func NewAuthController(
 	registerUseCase *usecases.RegisterUseCase,
+	loginUsecase *usecases.LoginUseCase,
 ) *AuthController {
 	return &AuthController{
 		registerUseCase: registerUseCase,
+		loginUseCase:    loginUsecase,
 	}
 }
 
@@ -65,4 +68,49 @@ func (c *AuthController) Register(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusCreated, response)
+}
+
+// Login godoc
+// @Summary Login user
+// @Description Authenticates a user and returns an access token.
+// @Tags Authentication
+// @Accept json
+// @Produce json
+// @Param request body dto.LoginRequest true "Login credentials"
+// @Success 200 {object} dto.LoginResponse
+// @Failure 400 {object} map[string]interface{}
+// @Failure 401 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /api/v1/auth/login [post]
+func (c *AuthController) Login(ctx *gin.Context) {
+	var req dto.LoginRequest
+
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "invalid request",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	response, err := c.loginUseCase.Execute(
+		ctx.Request.Context(),
+		req,
+	)
+
+	if err != nil {
+		if errors.Is(err, usecases.ErrInvalidCredentials) {
+			ctx.JSON(http.StatusUnauthorized, gin.H{
+				"message": "invalid email or password",
+			})
+			return
+		}
+
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"message": "failed to login",
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, response)
 }

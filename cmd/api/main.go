@@ -38,9 +38,9 @@ func main() {
 
 	//userRepository := repositories.NewUserRepository(db)
 
-	jwtService := jwt.New(cfg.JWTSecret)
+	// jwtService := jwt.New(cfg.JWTSecret)
 
-	_ = jwtService
+	// _ = jwtService
 
 	cloudinaryService, err := cloudinary.New(
 		cfg.CloudName,
@@ -55,8 +55,10 @@ func main() {
 
 	userRepository := repositories.NewUserRepository(db)
 	passwordService := services.NewPasswordService()
+	jwtService := jwt.New(cfg.JWTSecret)
 	registerUseCase := usecases.NewRegisterUseCase(*userRepository, passwordService)
-	authController := controllers.NewAuthController(registerUseCase)
+	loginUseCase := usecases.NewLoginUseCase(*userRepository, passwordService, jwtService)
+	authController := controllers.NewAuthController(registerUseCase, loginUseCase)
 
 	router := gin.Default()
 
@@ -74,6 +76,7 @@ func main() {
 	auth := api.Group("/auth")
 	{
 		auth.POST("/register", authController.Register)
+		auth.POST("/login", authController.Login)
 	}
 
 	log.Println("Server running on :" + cfg.AppPort)
